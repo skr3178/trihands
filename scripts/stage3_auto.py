@@ -124,8 +124,8 @@ def robust_triangulate(views, ego_idx=0):
             J[j] = X
         med = {i: float(np.median([np.linalg.norm(views[i][0].project(J[j]) - views[i][1][j])
                                    for j in range(21)])) for i in keep}
-        bad = [i for i in keep if i != ego_idx and med[i] > taus[i]]
-        if not bad: break
+        bad = [i for i in keep if (ego_idx is None or i != ego_idx) and med[i] > taus[i]]
+        if not bad or len(keep) <= 2: break          # never drop below 2 views
         keep.remove(max(bad, key=lambda i: med[i]))
     return J, keep, med
 

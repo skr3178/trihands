@@ -72,8 +72,17 @@ Full algorithm + notation: **`algorithm.md`**. Stage status toward the Figure-7 
    3D-hand trajectory (`j3d_trajectory.npz`) + `figure7_video.mp4` + `figure7_grid.jpg`. Per-frame
    dynamic camera selection (ego anchors; exo views join via the ray-ray gate). `lstsq` used for
    degenerate-baseline frames; frames w/o ego hand or <2 views are skipped.
-5. *(optional)* EgoExo4D-GT comparison row (Fig 7 bottom) via `annotations --benchmarks egopose`;
-   more takes; Stages 4–5.
+5. **Temporal exo-fallback** ✅ (extension beyond Algorithm 1) — `scripts/stage3_tracked.py`. When
+   the ego camera loses the hand, propagate its 3D from the last good frame, reproject into the exo
+   views, match the nearest detection (bystanders are far → rejected), and triangulate **exo-only**;
+   a reproj-consistency check stops divergence. Reclaims the multi-view redundancy the strict ego
+   anchor discarded: **right-hand coverage 93% → 100%** (1177 ego-anchored + 287 exo-fallback hands).
+   Diagnosis (`coverage_diag.py`): all 54 ego-miss frames had ≥2 exo views seeing a hand — none were
+   truly hidden, so the 93% "ceiling" was a method limit, not a data limit. Outputs:
+   `j3d_trajectory_tracked.npz`, `figure7_video_tracked.mp4`, `figure7_grid_tracked.jpg`.
+6. *(optional)* EgoExo4D-GT comparison row (Fig 7 bottom) = released hand annotations projected into
+   ego — **blocked for sfu_cooking025_7 (no hand annotations; only camera_pose)**; needs a
+   hand-annotated take. More takes; Stage 5 (MANO mesh).
 
 ## Documentation
 
