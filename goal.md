@@ -33,7 +33,7 @@ Full algorithm + notation: **`algorithm.md`**. Stage status toward the Figure-7 
 | 3 — Multiview triangulation | unproject → DLT → robust refine → subset/τ_c select → `J_3D` | ✅ **the core** | **DONE & automatic** (`stage3_auto.py`): ego-anchored ray-ray correspondence + IRLS Huber/τ_c |
 | 4 — Temporal interpolation | fill gaps ≤12 frames | ❌ (per-frame stills) | skip |
 | 5 — IK → MANO `θ` | fit mesh params | ❌ (keypoints, not mesh) | skip |
-| Ego reprojection (Supp C viz) | project `J_3D` into ego image | ✅ | **done (single hand)** — `scripts/reproject_ego.py`, lands on the ego hand |
+| Ego reprojection (Supp C viz) | project `J_3D` into ego image | ✅ | **done (full video)** — `scripts/stage3_video.py` → `figure7_video.mp4`, `figure7_grid.jpg` |
 
 ## Key findings / risks
 
@@ -66,8 +66,14 @@ Full algorithm + notation: **`algorithm.md`**. Stage status toward the Figure-7 
    isolates the camera math.*
 2. **Ego-anchored correspondence** — add the ego view (needs the trajectory) so the subset/τ_c
    gate auto-selects the wearer's hands and rejects bystanders. The paper's actual Stage 3.
-3. **Ego reprojection → Figure 7** — project `J_3D` into the ego image and overlay.
-4. *(later)* scale to the full take / more takes; optionally add Stages 4–5.
+3. **Ego reprojection → Figure 7** — project `J_3D` into the ego image and overlay. ✅
+4. **Full-video loop** ✅ — `scripts/stage3_video.py` runs the per-frame ego-anchored pipeline over
+   all 746 frames: **671 right + 508 left hands triangulated, 686/746 frames (92%)**, outputs the
+   3D-hand trajectory (`j3d_trajectory.npz`) + `figure7_video.mp4` + `figure7_grid.jpg`. Per-frame
+   dynamic camera selection (ego anchors; exo views join via the ray-ray gate). `lstsq` used for
+   degenerate-baseline frames; frames w/o ego hand or <2 views are skipped.
+5. *(optional)* EgoExo4D-GT comparison row (Fig 7 bottom) via `annotations --benchmarks egopose`;
+   more takes; Stages 4–5.
 
 ## Documentation
 

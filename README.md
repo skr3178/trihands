@@ -15,7 +15,7 @@ all fisheye) into **3D hand keypoints**, then reprojects them into the egocentri
 | 1 — Hand detection | YOLO bounding boxes per view | ✅ |
 | 2 — Single-view WiLoR | 2D hand keypoints per view | ✅ |
 | 3 — Multiview triangulation | ego-anchored correspondence + fisheye-unproject + DLT + IRLS/τ_c | ✅ |
-| — Ego reprojection | project 3D hand into the ego image (= Figure 7) | ✅ single hand |
+| — Ego reprojection (Figure 7) | project 3D hand into the ego image, full video | ✅ (671 R + 508 L hands, 686/746 frames) |
 | 4–5 | temporal interpolation / IK→MANO | skipped (not needed for the keypoint panel) |
 
 See [`algorithm.md`](algorithm.md) for the annotated algorithm + notation, and [`goal.md`](goal.md)
@@ -39,7 +39,8 @@ for the plan, findings, and build log.
 | `scripts/triangulate_geom.py` | Stage 3 geometry: exo fisheye-unproject + ray-DLT |
 | `scripts/reproject_ego.py` | builds the moving ego (Aria) camera; reprojects 3D into the ego view |
 | `scripts/triangulate_unified.py` | triangulate from ego + exo together |
-| `scripts/stage3_auto.py` | **full automatic Stage 3**: ego-anchored correspondence + robust triangulation |
+| `scripts/stage3_auto.py` | **automatic Stage 3** (single frame): ego-anchored correspondence + robust triangulation |
+| `scripts/stage3_video.py` | **full-video pipeline**: loop all frames → 3D-hand trajectory + Figure-7 video/grid |
 
 ## Data (not included)
 

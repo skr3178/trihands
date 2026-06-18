@@ -66,7 +66,8 @@ def wtriangulate(O, D, w):
     for o, d, wi in zip(O, D, w):
         P = wi * (np.eye(3) - np.outer(d, d))
         A += P; b += P @ o
-    return np.linalg.solve(A, b)
+    X, *_ = np.linalg.lstsq(A, b, rcond=None)   # robust to near-singular (degenerate baseline)
+    return X
 
 
 def ray_ray_dist(o1, d1, o2, d2):
@@ -82,11 +83,11 @@ def ray_perp(X, o, d):
     return float(np.linalg.norm(v - np.dot(v, d) * d))
 
 
-def match_exo(ego_kpts, exo_cams, exo_dets):
+def match_exo(ego_unproj, ego_kpts, exo_cams, exo_dets):
     """Ego anchor: pick each exo view's detection that is ray-consistent with the
     ego hand (mean ray-ray distance < MATCH_M). Resolution-independent → rejects
     noisy views, wrong-hand, and bystanders alike."""
-    ego_rays = [ego_cams_unproj(ego_kpts[j]) for j in range(21)]
+    ego_rays = [ego_unproj(ego_kpts[j]) for j in range(21)]
     accepted, log = [], []
     for name, cam in exo_cams.items():
         best, best_d = np.inf, None
@@ -129,12 +130,7 @@ def robust_triangulate(views, ego_idx=0):
     return J, keep, med
 
 
-# ego unproject closure set in main (depends on the per-frame ego camera)
-ego_cams_unproj = None
-
-
 def main():
-    global ego_cams_unproj
     exo = {v: ExoCam(c, v) for v, c in load_gopro_cams(CALIB).items()}
     exo_kp = np.load(KPTS); ego_kp = np.load(OUT.parent / "kpts/ego_300.npz")
 
@@ -143,7 +139,6 @@ def main():
     cam, R_dc, t_dc = build_ego_camera(rec)
     R_wd, t_wd, _ = world_device_pose(rec["tracking_timestamp_us"])
     egocam = EgoCam(cam, R_wd @ R_dc, R_wd @ t_dc + t_wd)
-    ego_cams_unproj = egocam.unproject
 
     # gather detections
     def dets(store, view):
@@ -159,7 +154,7 @@ def main():
     # process the wearer's RIGHT hand (ego idx with meta[0]==1)
     ego_R = next(k for k, m in ego_dets if m[0] == 1)
     print(f"frame {FRAME}: ego anchor = right hand; matching exo views...")
-    accepted, log = match_exo(ego_R, exo, exo_dets_all)
+    accepted, log = match_exo(egocam.unproject, ego_R, exo, exo_dets_all)
     print("  " + "  ".join(log))
 
     views = [(egocam, ego_R)] + accepted

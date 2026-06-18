@@ -115,12 +115,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--frames_root", required=True, help="dir with <view>/frame_%06d.jpg")
     ap.add_argument("--views", nargs="+", default=["aria01", "cam01", "cam02", "cam03", "cam04"])
-    ap.add_argument("--frames", nargs="+", type=int, required=True, help="frame indices")
+    ap.add_argument("--frames", nargs="+", type=int, default=None, help="explicit frame indices")
+    ap.add_argument("--frame_range", nargs=2, type=int, default=None, help="START END (inclusive)")
     ap.add_argument("--out_npz", required=True)
     ap.add_argument("--draw_dir", default=None, help="if set, save skeleton overlays here")
     ap.add_argument("--conf", type=float, default=0.3)
     args = ap.parse_args()
 
+    frames = args.frames if args.frames is not None else \
+        list(range(args.frame_range[0], args.frame_range[1] + 1))
+    args.frames = frames
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model, cfg, detector = load_models(device)
     resolve = lambda p: (p if Path(p).is_absolute() else ORIG_CWD / p)
