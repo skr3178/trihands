@@ -80,9 +80,15 @@ Full algorithm + notation: **`algorithm.md`**. Stage status toward the Figure-7 
    Diagnosis (`coverage_diag.py`): all 54 ego-miss frames had ≥2 exo views seeing a hand — none were
    truly hidden, so the 93% "ceiling" was a method limit, not a data limit. Outputs:
    `j3d_trajectory_tracked.npz`, `figure7_video_tracked.mp4`, `figure7_grid_tracked.jpg`.
-6. *(optional)* EgoExo4D-GT comparison row (Fig 7 bottom) = released hand annotations projected into
-   ego — **blocked for sfu_cooking025_7 (no hand annotations; only camera_pose)**; needs a
-   hand-annotated take. More takes; Stage 5 (MANO mesh).
+6. **EgoExo4D-GT comparison (Fig 7 both rows)** ✅ — `scripts/compare_gt.py`. EgoExo4D hand GT
+   only exists for a subset (74 cooking takes; *not* sfu_cooking025_7). Ran the full pipeline on
+   **iiith_cooking_111_4** (96 GT-annotated frames) and compared: **3D MPJPE ours-vs-GT = 23.9mm
+   mean / 21.9mm median** (vs paper's 185.7mm monocular HaWoR, Table 3) → multi-view agrees with GT
+   ~8× tighter than monocular. Two-row panel: `work/figure7_compare.jpg`. GT is partial-per-frame
+   (median 13/21 joints) and our hands are more complete (echoes the paper's 76.3% human-pref win).
+   *Finding the GT:* annotations manifest `egoexo-public/v2/annotations/manifest.json`, filter
+   `paths[].relative_path` for `hand/annotation` (the `handpose` benchmark TAG is unreliable).
+7. *(optional)* more takes; Stage 5 (MANO mesh).
 
 ## Documentation
 
