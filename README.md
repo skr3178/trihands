@@ -67,6 +67,11 @@ keypoints are noisier (partially occluded holding the food; WiLoR is trained on 
 for left). With **≥3 views the left hand drops from ~80 mm to ~29 mm**, matching the right. Two fixes
 follow directly: require ≥3 views, or improve left-hand 2D keypoints (e.g. a fine-tuned detector).
 
+On the frames where the left hand has ≥3 views it reconstructs accurately (per-frame 18–33 mm, the
+same range as the right hand) — the skeleton sits correctly on the left hand in both rows:
+
+![Left hand with ≥3 views](results/figure7_compare_3view.jpg)
+
 ## Scripts
 
 | Script | Role |
