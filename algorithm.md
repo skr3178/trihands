@@ -94,7 +94,7 @@ Status:  ✅ done   🔨 in progress   ⬜ to do   ⏭️ skipped (not needed fo
  └────────────────────────────────┬────────────────────────────────┘
                                   │   J_3D
                                   ▼
- ┌── STAGE 4  interpolate gaps ≤ 12 frames ──┐   ⏭️  skip (per-frame stills)
+ ┌── STAGE 4  interpolate gaps ≤ 12 frames ──┐   ✅  linear (stage4_interpolate.py)
  ├── STAGE 5  inverse kinematics → MANO θ ───┤   ⏭️  skip (keypoints, not mesh)
  └────────────────────────────────────────────┘
                                   │

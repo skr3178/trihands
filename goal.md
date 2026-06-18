@@ -31,7 +31,7 @@ Full algorithm + notation: **`algorithm.md`**. Stage status toward the Figure-7 
 | 1 — Hand detection | YOLO bbox per view | ✅ | **done** — `scripts/wilor_keypoints.py` |
 | 2 — Single-view WiLoR | 2D keypoints `J_2D` per view | ✅ | **done** — `scripts/wilor_keypoints.py` |
 | 3 — Multiview triangulation | unproject → DLT → robust refine → subset/τ_c select → `J_3D` | ✅ **the core** | **DONE & automatic** (`stage3_auto.py`): ego-anchored ray-ray correspondence + IRLS Huber/τ_c |
-| 4 — Temporal interpolation | fill gaps ≤12 frames | ❌ (per-frame stills) | skip |
+| 4 — Temporal interpolation | fill gaps ≤12 frames | ✅ | `stage4_interpolate.py` — linear; R 90%→93% |
 | 5 — IK → MANO `θ` | fit mesh params | ❌ (keypoints, not mesh) | skip |
 | Ego reprojection (Supp C viz) | project `J_3D` into ego image | ✅ | **done (full video)** — `scripts/stage3_video.py` → `figure7_video.mp4`, `figure7_grid.jpg` |
 
