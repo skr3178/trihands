@@ -1,0 +1,17 @@
+# EgoExo4D data — license forbids redistribution
+egoexo_data/
+# Regenerable pipeline intermediates (frames, keypoint caches, overlays)
+work/
+# Large binaries / checkpoints
+*.pt
+*.pth
+*.ckpt
+*.pkl
+*.onnx
+*.mp4
+# The source paper PDF (large; available on arXiv)
+*.pdf
+# Python
+__pycache__/
+*.pyc
+.venv*/
