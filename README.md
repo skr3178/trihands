@@ -50,6 +50,11 @@ pipeline on `iiith_cooking_111_4` and comparing to those annotations:
 Our multi-view hands agree with EgoExo4D's GT **~8× tighter than a monocular estimate** — the paper's
 core thesis (multi-view ≫ monocular).
 
+**Figure 7 reproduced** — top row = our triangulated hands, bottom row = EgoExo4D's released GT, same
+ego frames (both hands):
+
+![Figure 7: ours vs EgoExo4D GT](results/figure7_compare_full.jpg)
+
 ### Why the left hand is harder (a depth, not visibility, problem)
 
 Per-hand the right hand is ~24 mm but the left is worse — **only at 2 views**:
@@ -89,5 +94,5 @@ This repo contains **only code, docs, and license-safe charts**. Not included (a
 - Extracted frames and keypoint caches (regenerable from the above).
 - Model checkpoints (WiLoR / MANO) — see their respective repos.
 
-`figures/` holds the source-paper figures (reference); `results/` holds only synthetic charts (no
-dataset imagery).
+`figures/` holds the source-paper figures (reference); `results/` holds the synthetic charts plus the
+Figure-7 comparison overlays.
